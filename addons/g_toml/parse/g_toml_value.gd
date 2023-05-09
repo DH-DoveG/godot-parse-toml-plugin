@@ -350,7 +350,7 @@ func _type_list( _token: GTomlTokenObject ) -> GTomlTokenObject:
 
 
 
-#
+# 解析 key 值
 func _parse_key( _key: String ) -> PackedStringArray:
 	
 	var new: Array = []
