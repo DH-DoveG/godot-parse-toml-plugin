@@ -1,4 +1,12 @@
 
+#===========================================
+# 介绍：用于解析字符串
+# 
+# 
+# 
+# 作者：DH-DoveG
+#===========================================
+
 class_name GTomlParseString
 extends Node
 
@@ -73,9 +81,11 @@ func _check_doublequotation_singleline( _value: String ) -> String:
 	# 将手动转义转换: \\n -> \n
 	var pos: int = -1
 	
+	var char: String = ""
+	
 	for item in range( 0, _value.length() ):
 		
-		var char = _value[ item ]
+		char = _value[ item ]
 		
 		# 处理 \\ 后面紧接着的字符
 		if pos != -1:
@@ -167,9 +177,11 @@ func _check_doublequotation_multiline( _value: String ) -> String:
 	# 末尾转义结束后的附带
 	var is_escape_start	: bool = false
 	
+	var char: String = ""
+	
 	for item in range( 0, _value.length() ):
 		
-		var char = _value[ item ]
+		char = _value[ item ]
 		
 		# 处理 \\ 后面紧接着的字符
 		if pos != -1:

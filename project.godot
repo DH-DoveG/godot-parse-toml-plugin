@@ -21,8 +21,8 @@ GTomlParseTool="*res://addons/g_toml/parse/g_toml_parse.tscn"
 
 [display]
 
-window/size/viewport_width=500
-window/size/viewport_height=500
+window/size/viewport_width=640
+window/size/viewport_height=640
 
 [editor_plugins]
 
