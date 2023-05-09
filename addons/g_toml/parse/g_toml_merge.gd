@@ -61,6 +61,8 @@ func merge( _token: GTomlTokenObject ) -> void:
 	
 	#print( "parse_key || ", _token.parse_key, "\nparse_value || ", _token.parse_value )
 	
+	var is_not_list_array: bool = true
+	
 	# 判断 token 类型，如果是 LIST 类型就改变根路径
 	if _token.type == GTomlTokenObject.TOKEN_TYPE.LIST:
 		
@@ -71,11 +73,21 @@ func merge( _token: GTomlTokenObject ) -> void:
 			
 			# 设置 表数组
 			# 先看看是否冲突
-			assert( _check_load( root_load ), "表数组路径冲突" )
+			is_not_list_array = _check_load( root_load )
+			
+			# 如果是表数组
+			if not is_not_list_array:
+				
+				# 添加新字典
+				#print( ">>", data[ root_load[ 0 ] ] )
+				
+				data[ root_load[ 0 ] ].append( {} )
 			
 			# 设置
 			# 因为 root_load 一定是单个元素，所以直接取值
-			data[ root_load[ 0 ] ] = [{}]
+			else:
+				
+				data[ root_load[ 0 ] ] = [{}]
 	
 	else:
 		
@@ -97,15 +109,15 @@ func merge( _token: GTomlTokenObject ) -> void:
 			# 在就加入一下
 			# 进入数组的表中
 			# [{}]
-			#print( "-->", after[ target_load[0] ][0] )
-			after = after[ target_load[ 0 ] ][ 0 ]
+			#print( "-->", after[ target_load[0] ].back() )
+			after = after[ target_load[ 0 ] ].back()
 			curr_load.push_back( target_load[ 0 ] )
 			
 			begin = 1
 			pos = 1
 		
-		var curr = null
 		var load: String = ""
+		var curr: Variant = null
 		
 		for item in range( begin, target_load.size() ):
 			
@@ -122,7 +134,11 @@ func merge( _token: GTomlTokenObject ) -> void:
 				# 判断一下是不是到末尾了
 				if pos == end:
 					
-					assert( _check_load( curr_load ), "路径冲突" )
+					# 如果不是表数组
+					# 就会进行路径检查
+					if not is_not_list_array:
+						
+						assert( _check_load( curr_load ), "路径冲突" )
 					
 					after[ load ] = _token.parse_value
 				
@@ -174,13 +190,18 @@ func merge( _token: GTomlTokenObject ) -> void:
 # >> curr路径 可以是 save路径的末尾延续
 func _check_load( _load: PackedStringArray ) -> bool:
 	
+	var key: bool = true
+	
 	for load in save_load:
 		
 		# 比较路径
 		# 必须得到一个 null 否则说明路径重复来，报错
-		assert( load != _load, "与之前的路径冲突" )
+		#assert( load != _load, "与之前的路径冲突" )
+		if load == _load:
+			
+			return false
 		
-		var key: bool = true
+		key = true
 		
 		# 判断长度
 		# 如果 _load 长于 load，就反过来
@@ -199,6 +220,9 @@ func _check_load( _load: PackedStringArray ) -> bool:
 				key = true
 				break
 			
-		assert( key, "路径重复设置" )
+		if not key:
+			
+			return false
+		#assert( key, "路径重复设置" )
 	
 	return true
