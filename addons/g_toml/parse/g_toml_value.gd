@@ -1,10 +1,10 @@
 
 #===========================================
-# 介绍：对 .toml 文件内容进行初步的解析，获得以
-#      行数为 key 的 token
+# 介绍：对 GTomlTokenObject 进行解析
 # 
 # 
-# 作者：DH_DoveG
+# 
+# 作者：DH-DoveG
 #===========================================
 
 class_name GTomlValue
@@ -93,7 +93,7 @@ func parse( _token: GTomlTokenObject ) -> GTomlTokenObject:
 			_token.parse_key = _parse_key( _token.original_key )
 			_token.parse_value = _type_multiline_string_doublequotation( _token.original_value )
 	
-	print( "token-key > ", _token.parse_key, " || token-value > ", _token.parse_value )
+	#print( "token-key > ", _token.parse_key, " || token-value > ", _token.parse_value )
 	
 	return _token
 
@@ -167,7 +167,7 @@ func _parse_recursion( _value: Variant ) -> Variant:
 # 自动推导并解析类型
 func _type_auto( _value: String ) -> Variant:
 	
-	print( "type auto >", _value, "<" )
+	#print( "type auto >", _value, "<" )
 	
 	if _value.begins_with( '"""' ):
 			
@@ -338,7 +338,7 @@ func _type_list( _token: GTomlTokenObject ) -> GTomlTokenObject:
 	# [[bin.o]] F
 	if _token.is_list_array:
 		
-		print( "key ||", key )
+		#print( "key ||", key )
 		
 		assert( key.size() == 1, "表数组错误" )
 	
@@ -354,27 +354,29 @@ func _type_list( _token: GTomlTokenObject ) -> GTomlTokenObject:
 func _parse_key( _key: String ) -> PackedStringArray:
 	
 	var new: Array = []
+	var reg: RegEx = RegEx.new()
 	
-	var reg := RegEx.new()
 	reg.compile( "^[A-Za-z0-9_-]+$" )
 	
+	var key: String = ""
+	
 	# 遍历 loads
-	for i in toml_dictionary.parse_key( _key ):
+	for item in toml_dictionary.parse_key( _key ):
 		
-		var ii = i.strip_edges()
-		if ii.begins_with( "'" ):
+		key = item.strip_edges()
+		if key.begins_with( "'" ):
 			
-			new.push_back( _type_string_singlequotes( ii ) )
+			new.push_back( _type_string_singlequotes( key ) )
 		
-		elif ii.begins_with( '"' ):
+		elif key.begins_with( '"' ):
 			
-			new.push_back( _type_string_doublequotation( ii ) )
+			new.push_back( _type_string_doublequotation( key ) )
 		
 		else:
 			
-			assert( reg.search( ii ) != null, "key 解析错误" )
+			assert( reg.search( key ) != null, "key 解析错误" )
 			
-			new.push_back( ii )
+			new.push_back( key )
 	
 	return new
 

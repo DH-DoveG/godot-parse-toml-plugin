@@ -1,13 +1,22 @@
 
+#===========================================
+# 介绍：用于解析数字
+# 
+# 
+# 
+# 作者：DH-DoveG
+#===========================================
+
 class_name GTomlParseNumber
 extends Node
 
 
 
 
-# 正则表达式实例与正则表达式
-var regex	: RegEx		= null
-var pattern	: String	= ""
+# 正则表达式实例
+var regex: RegEx = null
+# 存放正则表达式
+var pattern: String = ""
 
 
 

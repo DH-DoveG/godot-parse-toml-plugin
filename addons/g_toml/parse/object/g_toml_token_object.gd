@@ -1,11 +1,17 @@
 
+#===========================================
+# 介绍：用于存放 token 信息
+# 
+# 
+# 
+# 作者：DH_DoveG
+#===========================================
+
 class_name GTomlTokenObject
 extends Node
 
 
 
-
-#
 
 # Token 类型
 enum TOKEN_TYPE {
