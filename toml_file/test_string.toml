@@ -1,0 +1,25 @@
+
+str1 = "Hello World"
+
+str2 = 'Way? Fuck\t Toml!'
+
+str3 = """
+	Hello \
+	World
+"""
+
+str4 = '''
+	Hello
+	World
+'''
+
+str5 = "Hello \\ Wo\"rld"
+
+# text1 = " Hello "
+# text2 = """ Hello """
+# text3 = ' Hello '
+# text4 = ''' Hello '''
+# text5 = ''' """ '''
+# text6 = ''' "" '''
+# text7 = ''' """ """ '''
+# text8 = '\'
