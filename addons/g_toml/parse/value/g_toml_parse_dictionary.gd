@@ -58,11 +58,11 @@ func adjust( _dic: Dictionary ) -> Dictionary:
 	# 如果当前走的路径的记录与注册过的路径重复就报错
 	# 判断逻辑
 	# 1. 当前路径 不能是 注册路径中的 end, 也就是当前路径不能与注册路径的任何一项完全匹配
-	#	> { a.b.c = 0, a.b.c.d = 0 }	F
-	#	> { a.b.c = 0, a.b.e = 0 }		T
+	#	> { a.b.c = 0, a.b.c.d = 0 }	[F]
+	#	> { a.b.c = 0, a.b.e = 0 }		[T]
 	# 2. 当前路径的终点 不能是 注册路径从开始起的一段路径
-	#	> { a.b.c.d.e.f = 0, a.b.c.d = 1 }	F
-	#	> { a.b.c.d.e.f = 0, a.b.c.e = 1 }	T
+	#	> { a.b.c.d.e.f = 0, a.b.c.d = 1 }	[F]
+	#	> { a.b.c.d.e.f = 0, a.b.c.e = 1 }	[T]
 	var save_load: Array = []
 	var curr_load: PackedStringArray = []
 	
@@ -202,41 +202,49 @@ func _check_dictionary_value( _value: String ) -> Dictionary:
 	#	key = [
 	#	]}
 	# 这也是错误的
+	# \n value \n
 	var end_pos		: int = _value.length() - 1
 	var begin_pos	: int = 0
+	
+	var end_value	: String = ""
+	var begin_value	: String = ""
 	
 	while begin_pos != -1 and end_pos != -1:
 		
 		#print( "begin_pos >", begin_pos, "|| end_pos >", end_pos )
 		
+		begin_value = _value[ begin_pos ]
+		
 		if begin_pos != -1 and (
-			_value[ begin_pos ]	!= "\t" and \
-			_value[ begin_pos ]	!= "\n" and \
-			_value[ begin_pos ]	!= "\f" and \
-			_value[ begin_pos ]	!= "\b" and \
-			_value[ begin_pos ]	!= "\r" and \
-			_value[ begin_pos ]	!= " " ):
+			begin_value != "\t" and \
+			begin_value != "\n" and \
+			begin_value != "\f" and \
+			begin_value != "\b" and \
+			begin_value != "\r" and \
+			begin_value != " " ):
 			
 			begin_pos = -1
 		
+		end_value = _value[ end_pos ]
+		
 		if end_pos != -1 and (
-			_value[ end_pos ]	!= "\t" and \
-			_value[ end_pos ]	!= "\n" and \
-			_value[ end_pos ]	!= "\f" and \
-			_value[ end_pos ]	!= "\b" and \
-			_value[ end_pos ]	!= "\r" and \
-			_value[ end_pos ]	!= " " ):
+			end_value != "\t" and \
+			end_value != "\n" and \
+			end_value != "\f" and \
+			end_value != "\b" and \
+			end_value != "\r" and \
+			end_value != " " ):
 			
 			end_pos = -1
 		
 		if begin_pos != -1:
 			
-			assert( _value[ begin_pos ] != "\n", "错误的换行" )
+			assert( begin_value != "\n", "错误的换行" )
 			begin_pos += 1
 		
 		if end_pos != -1:
 			
-			assert( _value[ end_pos ] != "\n", "错误的换行" )
+			assert( end_value != "\n", "错误的换行" )
 			end_pos -= 1
 	
 	# 清除两边的转义

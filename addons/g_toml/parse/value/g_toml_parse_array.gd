@@ -112,13 +112,11 @@ func _check_array( _value: String ) -> Array:
 			
 			cache += char
 			is_d += 1
-			pass
 		
 		elif char == "}" and not is_m_s and not inQuotes and not is_m_d and not inDoubleQuotes:
 			
 			cache += char
 			is_d -= 1
-			pass
 		
 		# 等到遇到 , 并且不在字符串内才会添加值
 		elif char == "," and is_d == 0 and not is_m_s and not inQuotes and not is_m_d and not inDoubleQuotes:
@@ -127,7 +125,7 @@ func _check_array( _value: String ) -> Array:
 			# 如：[1,2,,] 或 [,1,2]
 			# 允许尾逗号
 			# 如：[1,2,]
-			assert( not cache.is_empty(), "错误的," )
+			assert( not cache.is_empty(), "错误的','号" )
 			
 			current.append(cache)
 			cache = ""

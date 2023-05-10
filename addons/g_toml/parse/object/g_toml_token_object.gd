@@ -64,5 +64,5 @@ var parse_value	: Variant = null
 
 # LIST 用的
 # 看看是不是表数组
-# [[]]
+# [[bin]] -> 这是表数组
 var is_list_array: bool = false

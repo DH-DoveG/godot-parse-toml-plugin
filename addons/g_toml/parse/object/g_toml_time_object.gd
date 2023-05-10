@@ -30,28 +30,21 @@ extends Node
 #总之，这个时间精确到了微秒级别，而且使用了标准化的协调世界时。
 
 # 年
-var year: int = -1
+var year		: String = ""
 # 月
-var month: int = -1
+var month		: String = ""
 # 日
-var day: int = -1
+var day			: String = ""
 # 时
-var hour: int = -1
+var hour		: String = ""
 # 分
-var minute: int = -1
+var minute		: String = ""
 # 秒
-var second: int = -1
+var second		: String = ""
 # 微秒 ?
-var microsecond: int = -1
-
-var timezone: String = ""
-
-
-
-
-func _init() -> void:
-	
-	pass
+var microsecond	: String = ""
+# 时区
+var timezone	: String = ""
 
 
 
@@ -66,7 +59,7 @@ func time_set( _time_names: Dictionary, _time_values: PackedStringArray ) -> voi
 		
 		# names的 value 对应 values 的下标
 		# 保存转换为 int 的时间
-		set( key, int( _time_values[ _time_names[ key ] ] ) )
+		set( key, _time_values[ _time_names[ key ] ] )
 	
 	# 时区
 	timezone = _time_values[ 10 ]
