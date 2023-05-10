@@ -71,10 +71,16 @@ array3 = [
 	,"Hello"
 ]
 
+# 现在表数组可以正确的解析了
 [[list-array]]
 
 la1 = 0
 la2 = 1
+
+[[list-array]]
+
+la1 = 3
+la2 = 4
 
 [list]
 
