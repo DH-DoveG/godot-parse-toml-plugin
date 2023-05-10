@@ -10,6 +10,22 @@ extends Control
 
 func _ready() -> void:
 	
+	#var reg: RegEx = RegEx.new()
+	#reg.compile( "/\\\\u([0-9A-Fa-f]{4})|\\\\U([0-9A-Fa-f]{8})/g" )
+	#var m: RegExMatch = reg.search( "\\u4f60" )
+	#if m:
+	#	print( "m>", m.get_string() )
+	
+	#var regex = "\\\\u([0-9a-fA-F]+){4}|\\\\u([0-9a-fA-F]+){8}"
+	#var r = RegEx.new()
+	#r.compile(regex)
+	#var str = "\\u4f6123456789"#\\u597d!
+	#var matc = r.search(str)
+	#if matc:
+	#	print( ">>>>", matc.get_string() )
+	
+	#print( "\u4f60" )
+	
 	var begin_msec	: int = 0
 	var end_msec	: int = 0
 	
@@ -19,7 +35,8 @@ func _ready() -> void:
 	
 	#test( "res://toml_file/test_all.toml" )
 	#test( "res://toml_file/test.toml" )
-	test( "res://toml_file/list_array.toml" )
+	#test( "res://toml_file/list_array.toml" )
+	test( "res://toml_file/unicode.toml" )
 	
 	# =========================================
 	
