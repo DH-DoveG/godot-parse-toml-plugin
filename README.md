@@ -8,7 +8,7 @@ Toml file parsing plugin for Godot4.
 
 1. 支持 json 转换为 toml。 Supports conversion from json to toml.
 
-2. 支持 Unicode 字符。 Unicode character support.
+2. ~~支持 Unicode 的转义序列。 Unicode support for escape sequences.~~
 
 # 项目地址 load
 
