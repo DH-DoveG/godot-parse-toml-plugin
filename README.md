@@ -4,8 +4,16 @@
 
 Toml file parsing plugin for Godot4.
 
-项目地址一:[github](https://github.com/DH-DoveG/godot-parse-toml-plugin)
+# 计划 plan
 
-项目地址二:[gitee](https://gitee.com/DH-DoveG/godot-parse-toml-plugin)
+1. 支持 json 转换为 toml。 Supports conversion from json to toml.
 
-gitee上的为本项目的镜像。
+2. 支持 Unicode 字符。 Unicode character support.
+
+# 项目地址 load
+
+项目地址一: [github](https://github.com/DH-DoveG/godot-parse-toml-plugin)
+
+项目地址二: [gitee](https://gitee.com/DH-DoveG/godot-parse-toml-plugin)
+
+注: `gitee`上的为`github`上的项目镜像。

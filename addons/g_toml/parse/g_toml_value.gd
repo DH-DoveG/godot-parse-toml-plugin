@@ -130,33 +130,33 @@ func _parse_recursion( _value: Variant ) -> Variant:
 	if typeof( _value ) == TYPE_ARRAY:
 		
 		# 遍历数组
-		for i in range( 0, _value.size() ):
+		for item in range( 0, _value.size() ):
 			
 			# 如果还是数组类型就递归，并替换掉当前的 value
-			if typeof( _value[ i ] ) == TYPE_ARRAY:
+			if typeof( _value[ item ] ) == TYPE_ARRAY:
 				
-				_value[ i ] = _parse_recursion( _value[ i ] )
+				_value[ item ] = _parse_recursion( _value[ item ] )
 			
 			# 如果不是数组类型就解析，并替换掉当前的 value
 			else:
 				
-				_value[ i ] = _type_auto( _value[ i ] )
+				_value[ item ] = _type_auto( _value[ item ] )
 	
 	# 如果值是 字典类型
 	elif typeof( _value ) == TYPE_DICTIONARY:
 		
 		# 遍历
-		for i in range( 0, _value.size() ):
+		for item in range( 0, _value.size() ):
 			
 			# 如果还是字典类型就递归，并替换掉当前的 vlaue
-			if typeof( _value[ i ] ) == TYPE_DICTIONARY:
+			if typeof( _value[ item ] ) == TYPE_DICTIONARY:
 				
-				_value[ i ] = _parse_recursion( _value[ i ] )
+				_value[ item ] = _parse_recursion( _value[ item ] )
 			
 			# 如果不是字典就解析，并替换掉当前的 value
 			else:
 				
-				_value[ i ] = _type_auto( _value[ i ] )
+				_value[ item ] = _type_auto( _value[ item ] )
 	
 	# 返回解析替换完成的 _value
 	return _value
