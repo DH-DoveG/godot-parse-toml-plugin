@@ -1,7 +1,7 @@
 
 str1 = "Hello World"
 
-str2 = 'Way? Fuck\t Toml!'
+str2 = 'Way? is\t Toml!'
 
 str3 = """
 	Hello \
