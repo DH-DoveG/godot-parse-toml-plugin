@@ -88,6 +88,12 @@ func parse_file( _file_name: String ) -> Dictionary:
 
 
 
+# 字典转换为 toml
+# TODO
+func to_toml( _dictionary: Dictionary ) -> String:
+	
+	return ""
+
 # 解析文件并用于实例化对象
 func parse_file_to_object() -> void:
 	
