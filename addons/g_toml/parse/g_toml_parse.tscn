@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bet0rvdoyc8go"]
-
-[ext_resource type="Script" path="res://addons/g_toml/parse/g_toml_parse.gd" id="1_nexfs"]
-
-[node name="g_toml_parse" type="Node"]
-script = ExtResource("1_nexfs")

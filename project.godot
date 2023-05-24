@@ -13,11 +13,11 @@ config_version=5
 config/name="godot-parse-toml-plugin"
 run/main_scene="res://control.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
-config/icon="res://addons/g_toml/assets/g_toml.png"
+config/icon="res://addons/dh_toml/assets/g_toml.png"
 
 [autoload]
 
-GTomlParseTool="*res://addons/g_toml/parse/g_toml_parse.tscn"
+DHTomlParseTool="*res://addons/dh_toml/parse/dh_toml_parse.tscn"
 
 [display]
 
@@ -26,7 +26,7 @@ window/size/viewport_height=640
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/g_toml/plugin.cfg")
+enabled=PackedStringArray("res://addons/dh_toml/plugin.cfg")
 
 [rendering]
 

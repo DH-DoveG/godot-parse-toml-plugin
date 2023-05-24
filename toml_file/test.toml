@@ -82,6 +82,11 @@ la2 = 1
 la1 = 3
 la2 = 4
 
+[[list_array]]
+
+la1 = 5
+la2 = 6
+
 [list]
 
 a.b.c.d.e.f = 0
