@@ -1,13 +1,13 @@
 
 #===========================================
 # 介绍：对 .toml 文件内容进行初步的解析，生成
-#      GTomlTokenObject 对象
+#      DHTomlTokenObject 对象
 # 
 # 
 # 作者：DH-DoveG
 #===========================================
 
-class_name GTomlToken
+class_name DHTomlToken
 extends Node
 
 
@@ -67,10 +67,10 @@ var is_escape		: bool = false
 
 
 # 保存所有 token
-var tokens	: Array[ GTomlTokenObject ] = []
+var tokens	: Array[DHTomlTokenObject] = []
 
 # 确定 token 类型
-var is_type: GTomlTokenObject.TOKEN_TYPE = GTomlTokenObject.TOKEN_TYPE.NULL
+var is_type: DHTomlTokenObject.TOKEN_TYPE = DHTomlTokenObject.TOKEN_TYPE.NULL
 
 
 
@@ -96,7 +96,7 @@ func clear() -> void:
 	is_multiline_singlequote		= false
 	is_multiline_doublequotation	= false
 	
-	is_type = GTomlTokenObject.TOKEN_TYPE.NULL
+	is_type = DHTomlTokenObject.TOKEN_TYPE.NULL
 	
 	tokens.clear()
 
@@ -104,7 +104,7 @@ func clear() -> void:
 
 
 # 返回 tokens 的副本并清除掉记录
-func tokens_get() -> Array[ GTomlTokenObject ]:
+func get_tokens() -> Array[DHTomlTokenObject]:
 	
 	var result = tokens.duplicate()
 	
@@ -132,13 +132,13 @@ func check() -> bool:
 # 解析传入的 line
 # 需要传入解析 line 与行数（这将作为key来使用）
 # 解析结果将保存到 tokens 之中
-func parse( _line: String, _number: int ) -> void:
+func parse(_line: String, _number: int) -> void:
 	
-	#print( "line ?", line )
+	#print("line ?", line)
 	
 	while pos < _line.length():
 		
-		char = _line[ pos ]
+		char = _line[pos]
 		
 		#print("char>", char)
 		
@@ -169,7 +169,7 @@ func parse( _line: String, _number: int ) -> void:
 		if is_escape:
 			
 			# 不在 字符串 里的手动转义是错误的
-			assert( _is_str(), "错误的转义" )
+			assert(_is_str(), "错误的转义")
 			
 			# 如果是单行双引号字符串的话
 			# 将错误 "\ "
@@ -181,14 +181,14 @@ func parse( _line: String, _number: int ) -> void:
 			
 			"'":
 				
-				if _char_is_singlequotes( _line ):
+				if _char_is_singlequotes(_line):
 					
 					continue
 			
 			
 			'"':
 				
-				if _char_is_doublequotation( _line ):
+				if _char_is_doublequotation(_line):
 					
 					continue
 			
@@ -263,7 +263,7 @@ func parse( _line: String, _number: int ) -> void:
 				# 不在字符串内，就交由专门的方法处理
 				else:
 					
-					_char_is_array_left( _number )
+					_char_is_array_left(_number)
 			
 			
 			"]":
@@ -332,8 +332,8 @@ func parse( _line: String, _number: int ) -> void:
 						# 判断一下，如果要设置为 key 的话，需要保证 is_list 等于 false
 						# 如果不等于 false 就说明试图用 数组 来作为 key
 						# 也需要保证 is_dictionary 等于 0
-						assert( not is_list, "试图用数组来作为 key" )
-						assert( is_dictionary == 0, "试图用内联表作为 key" )
+						assert(not is_list, "试图用数组来作为 key")
+						assert(is_dictionary == 0, "试图用内联表作为 key")
 						
 						# 记录 key 并重置缓存
 						key = cache
@@ -350,15 +350,15 @@ func parse( _line: String, _number: int ) -> void:
 					# 就报错
 					if _is_str() and is_dictionary == 0:
 						
-						assert( false, "额外的 = 号" )
+						assert(false, "额外的 = 号")
 			
 			
 			"\\":
 				
 				# 如果在 ' 原始字面量就无视 \\ 的转义，直接加入
 				# 如果不在才进行转义判断
-				if is_type != GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE and \
-					is_type != GTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
+				if is_type != DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE and \
+					is_type != DHTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
 					
 					is_escape = not is_escape
 				
@@ -375,7 +375,7 @@ func parse( _line: String, _number: int ) -> void:
 				# 判断是否作为 类型
 				if is_write_type:
 					
-					is_type = GTomlTokenObject.TOKEN_TYPE.OTHER
+					is_type = DHTomlTokenObject.TOKEN_TYPE.OTHER
 					is_write_type = false
 		
 				
@@ -415,7 +415,7 @@ func parse( _line: String, _number: int ) -> void:
 		value += cache
 		cache = ""
 		
-		#print( "key>>", key, "\nvalue>>", value )
+		#print("key>>", key, "\nvalue>>", value)
 		
 		# 如果 key 与 value 都为空就说明遇到了空白行
 		# 因为不在字符串中的转义字符不会被收集，所以空行打 tab、空格 也符合这个条件
@@ -425,14 +425,14 @@ func parse( _line: String, _number: int ) -> void:
 		
 		# 如果有 value 没 key 也是错误的
 		# 例如： k
-		# 还有一种：[ list ]
+		# 还有一种：[list]
 		# 这要判断一个 is_list 标记
 		# 如果标记为 false 就属于情况一
 		if not is_list and \
 			key.is_empty() and \
 			not value.is_empty():
 			
-			assert( false, "缺少key值" )
+			assert(false, "缺少key值")
 		
 		# 如果 key 不等于空而 value 等于空。然后， line_number 等于当前 number
 		# 只有key没有value是错误的
@@ -441,27 +441,27 @@ func parse( _line: String, _number: int ) -> void:
 			value.is_empty() and \
 			line_number == _number:
 			
-			assert( false, "缺少value值" )
+			assert(false, "缺少value值")
 		
 		# 如果是 list
 		if is_list:
 			
 			# 设置token类型
-			is_type = GTomlTokenObject.TOKEN_TYPE.LIST
+			is_type = DHTomlTokenObject.TOKEN_TYPE.LIST
 			# 取消标记
 			is_list = false
 		
-		var token_object = GTomlTokenObject.new()
+		var token_object = DHTomlTokenObject.new()
 		
 		token_object.original_value = value
 		token_object.original_key = key
 		token_object.type = is_type
 		token_object.line = line_number
 		
-		tokens.push_back( token_object )
+		tokens.append(token_object)
 		
 		# 记录tokens
-		#tokens[ line_number ] = {
+		#tokens[line_number] = {
 		#	"key"	: key,
 		#	"value"	: value,
 		#	"type"	: is_type
@@ -470,7 +470,7 @@ func parse( _line: String, _number: int ) -> void:
 		# 重置
 		key		= ""
 		value	= ""
-		is_type	= GTomlTokenObject.TOKEN_TYPE.NULL
+		is_type	= DHTomlTokenObject.TOKEN_TYPE.NULL
 		
 		return
 	
@@ -480,11 +480,11 @@ func parse( _line: String, _number: int ) -> void:
 	# 因为这两个是单行的
 	# 这说明数据不完整
 	# 如果是的话就报错
-	#print( "is_d >", is_doublequotation, "||is_s >", is_singlequote )
+	#print("is_d >", is_doublequotation, "||is_s >", is_singlequote)
 	if is_doublequotation or \
 		is_singlequote:
 		
-		assert( false, "单行字符串不完整" )
+		assert(false, "单行字符串不完整")
 	
 	# 内联表是只允许单行的，不允许多行
 	# 如果读取该行结束，表并没有匹配结束，就说明是数据不完整
@@ -498,7 +498,7 @@ func parse( _line: String, _number: int ) -> void:
 			not is_multiline_singlequote and \
 			is_array == 0:
 			
-			assert( false, "内联表不完整" )
+			assert(false, "内联表不完整")
 	
 	# 看一下 is_multiline... 系列的与 is_array
 	# 因为这3者是可以多行的
@@ -514,7 +514,7 @@ func parse( _line: String, _number: int ) -> void:
 	if is_list and \
 		is_array != 0:
 		
-		assert( false, "表不完整" )
+		assert(false, "表不完整")
 	
 	return
 
@@ -535,44 +535,44 @@ func _is_str() -> bool:
 # 判断字符串采集是否已经完整
 # 不判断是否不完整
 # 只判断是否已经完整了还继续收集
-func _is_full( ) -> void:
+func _is_full() -> void:
 	
 	var full = false
 	
 	match is_type:
 		
-		GTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
+		DHTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
 			
 			if not is_singlequote:
 				
 				full = true
 		
-		GTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION:
+		DHTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION:
 			
 			if not is_doublequotation:
 				
 				full = true
 		
-		GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE:
+		DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE:
 			
 			if not is_multiline_singlequote:
 				
 				full = true
 		
-		GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION:
+		DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION:
 			
 			if not is_multiline_doublequotation:
 				
 				full = true
 		
-		GTomlTokenObject.TOKEN_TYPE.DICTIONARY:
+		DHTomlTokenObject.TOKEN_TYPE.DICTIONARY:
 			
 			# 字典已经收集完整
 			if is_dictionary == 0:
 				
 				full = true
 		
-		GTomlTokenObject.TOKEN_TYPE.ARRAY:
+		DHTomlTokenObject.TOKEN_TYPE.ARRAY:
 			
 			if is_array == 0:
 				
@@ -584,7 +584,7 @@ func _is_full( ) -> void:
 	if full:
 		
 		# 如果已经完整，而 char 又不是列举的这些，就报错
-		assert( char == "\n" or
+		assert(char == "\n" or
 				char == "\t" or
 				char == " "  or
 				char == "#"  or
@@ -597,7 +597,7 @@ func _is_full( ) -> void:
 # char = "
 # 返回 0 表示不跳转
 # 返回 1 表示跳转 continue
-func _char_is_doublequotation( _line: String ) -> bool:
+func _char_is_doublequotation(_line: String) -> bool:
 	
 	# 看一下有没有转义
 	if is_escape:
@@ -605,7 +605,7 @@ func _char_is_doublequotation( _line: String ) -> bool:
 		# 如果转义的话就要看一下当前是不是在 is_doublequotation 中
 		# 或者 is_singlequote 中
 		# 如果在的话就直接加入不视为结尾
-		# (这表示在字符串内的转义 " )
+		# (这表示在字符串内的转义 ")
 		if  _is_str():
 			
 			# 使用掉转义
@@ -625,8 +625,8 @@ func _char_is_doublequotation( _line: String ) -> bool:
 	
 	# 需要判断一下，现在是不是在 ''' 或 ' 之内
 	# key = ''' """ """ '''
-	if is_type == GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE or \
-		is_type == GTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
+	if is_type == DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE or \
+		is_type == DHTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE:
 		
 		cache += '"'
 		
@@ -654,7 +654,7 @@ func _char_is_doublequotation( _line: String ) -> bool:
 			# 判断是否作为 类型
 			if is_write_type:
 				
-				is_type = GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION
+				is_type = DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION
 				is_write_type = false
 		
 		cache += '"""'
@@ -666,7 +666,7 @@ func _char_is_doublequotation( _line: String ) -> bool:
 	
 	# 结尾时，还有可能是 "" 而非 """
 	if is_multiline_doublequotation and \
-		_line.substr( pos, 2 ) == '""':
+		_line.substr(pos, 2) == '""':
 		
 		is_multiline_doublequotation = 0
 		
@@ -702,7 +702,7 @@ func _char_is_doublequotation( _line: String ) -> bool:
 			# 判断是否作为 类型
 			if is_write_type:
 				
-				is_type = GTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION
+				is_type = DHTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION
 				is_write_type = false
 		
 		# 添加值到缓存
@@ -716,7 +716,7 @@ func _char_is_doublequotation( _line: String ) -> bool:
 # char = '
 # 返回 0 表示不跳转
 # 返回 1 表示跳转 continue
-func _char_is_singlequotes( _line: String ) -> bool:
+func _char_is_singlequotes(_line: String) -> bool:
 	
 	# 看一下有没有转义
 	if is_escape:
@@ -724,7 +724,7 @@ func _char_is_singlequotes( _line: String ) -> bool:
 		# 如果转义的话就要看一下当前是不是在 is_doublequotation 中
 		# 或者 is_singlequote 中
 		# 如果在的话就直接加入不视为结尾
-		# (这表示在字符串内的转义 " )
+		# (这表示在字符串内的转义 ")
 		if  _is_str():
 			
 			cache += char
@@ -742,8 +742,8 @@ func _char_is_singlequotes( _line: String ) -> bool:
 	
 	# 需要判断一下，现在是不是在 """ 或 " 之内
 	# key = """ ''' ''' """
-	if is_type == GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION or \
-		is_type == GTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION:
+	if is_type == DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_DOUBLEQUOTATION or \
+		is_type == DHTomlTokenObject.TOKEN_TYPE.STRING_DOUBLEQUOTATION:
 		
 		cache += "'"
 		
@@ -772,7 +772,7 @@ func _char_is_singlequotes( _line: String ) -> bool:
 			# 判断是否作为 类型
 			if is_write_type:
 				
-				is_type = GTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE
+				is_type = DHTomlTokenObject.TOKEN_TYPE.MULTILINE_STRING_SINGLEQUOTE
 				is_write_type = false
 			
 		cache += "'''"
@@ -820,7 +820,7 @@ func _char_is_singlequotes( _line: String ) -> bool:
 			# 判断是否作为 类型
 			if is_write_type:
 				
-				is_type = GTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE
+				is_type = DHTomlTokenObject.TOKEN_TYPE.STRING_SINGLEQUOTE
 				is_write_type = false
 		
 		# 添加值到缓存
@@ -832,7 +832,7 @@ func _char_is_singlequotes( _line: String ) -> bool:
 
 
 # 遇到了 [
-func _char_is_array_left( _number: int ) -> void:
+func _char_is_array_left(_number: int) -> void:
 	
 	# 判断一下有 key 了没有
 	# 如果有 key 了就说明值是 数组
@@ -856,13 +856,13 @@ func _char_is_array_left( _number: int ) -> void:
 		# 判断是否作为 类型
 		if is_write_type:
 			
-			is_type = GTomlTokenObject.TOKEN_TYPE.ARRAY
+			is_type = DHTomlTokenObject.TOKEN_TYPE.ARRAY
 			is_write_type = false
 
 
 
 
-# 遇到了 ]
+# 遇到了]
 func _char_is_array_right() -> void:
 
 	# 因为匹配了一个
@@ -874,9 +874,9 @@ func _char_is_array_right() -> void:
 	# 小于 0 就报错
 	# 因为这将对应这些非法情况:
 	# []]
-	# ][
+	#][
 	# 如果 is_array 小于 0
-	assert( is_array >= 0, "[] 没有完全匹配" )
+	assert(is_array >= 0, "[] 没有完全匹配")
 
 
 
@@ -889,7 +889,7 @@ func _char_is_dictionary_left() -> void:
 	# 因为 {} 不能作为 key
 	if key.is_empty():
 		
-		assert( false, "试图将内联表作为 key" )
+		assert(false, "试图将内联表作为 key")
 	
 	# 作为 value
 	else:
@@ -900,7 +900,7 @@ func _char_is_dictionary_left() -> void:
 		# 判断是否作为 类型
 		if is_write_type:
 			
-			is_type = GTomlTokenObject.TOKEN_TYPE.DICTIONARY
+			is_type = DHTomlTokenObject.TOKEN_TYPE.DICTIONARY
 			is_write_type = false
 
 
@@ -915,4 +915,4 @@ func _char_is_dictionary_right() -> void:
 	is_dictionary -= 1
 	cache += '}'
 	
-	assert( is_dictionary >= 0, "没有得到完全匹配" )
+	assert(is_dictionary >= 0, "没有得到完全匹配")

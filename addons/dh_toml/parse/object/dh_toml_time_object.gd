@@ -7,7 +7,7 @@
 # 作者：DH-DoveG
 #===========================================
 
-class_name GTomlTimeObject
+class_name DHTomlTimeObject
 extends Node
 
 
@@ -29,37 +29,37 @@ extends Node
 #
 #总之，这个时间精确到了微秒级别，而且使用了标准化的协调世界时。
 
-# 年
-var year		: String = ""
-# 月
-var month		: String = ""
-# 日
-var day			: String = ""
-# 时
-var hour		: String = ""
-# 分
-var minute		: String = ""
-# 秒
-var second		: String = ""
-# 微秒 ?
-var microsecond	: String = ""
-# 时区
+## 年
+var year		: int = 0
+## 月
+var month		: int = 0
+## 日
+var day			: int = 0
+## 时
+var hour		: int = 0
+## 分
+var minute		: int = 0
+## 秒
+var second		: int = 0
+## 微秒 ?
+var microsecond	: int = 0
+## 时区
 var timezone	: String = ""
 
 
 
 
-# 设置时间
-func time_set( _time_names: Dictionary, _time_values: PackedStringArray ) -> void:
+## 设置时间
+func set_time(_time_names: Dictionary, _time_values: PackedStringArray) -> void:
 	
-	#print( "_time_names  >", _time_names )
-	#print( "_time_values >", _time_values )
+	#print("_time_names  >", _time_names)
+	#print("_time_values >", _time_values)
 	
 	for key in _time_names:
 		
-		# names的 value 对应 values 的下标
+		# names 的 value 对应 values 的下标
 		# 保存转换为 int 的时间
-		set( key, _time_values[ _time_names[ key ] ] )
+		set(key, int(_time_values[_time_names[key]]))
 	
 	# 时区
-	timezone = _time_values[ 10 ]
+	timezone = _time_values[10]

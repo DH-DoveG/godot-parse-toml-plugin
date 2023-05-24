@@ -7,7 +7,7 @@
 # 作者：DH-DoveG
 #===========================================
 
-class_name GTomlParseString
+class_name DHTomlParseString
 extends Node
 
 
@@ -16,32 +16,32 @@ extends Node
 # 解析 双引号单行
 # 值设先都是已经处理好两边的
 # 即：
-func parse_doublequotation( _value: String ) -> String:
+func parse_doublequotation(_value: String) -> String:
 	
 	# 去掉两边的 "
-	var value: String = _value.substr( 1, _value.length() - 2 )
+	var value: String = _value.substr(1, _value.length() - 2)
 	
-	return _check_doublequotation( value )
+	return _check_doublequotation(value)
 
 
 
 
 # 解析 双引号多行
-func parse_multiline_doublequotation( _value: String ) -> String:
+func parse_multiline_doublequotation(_value: String) -> String:
 	
 	# 去掉前端的 """
-	var value: String = _value.substr( 3 )
+	var value: String = _value.substr(3)
 	
 	# 看一下是 """ 结尾还是 "" 结尾
 	if value.ends_with('"""'):
 		
-		value = value.substr( 0, value.length() - 3 )
+		value = value.substr(0, value.length() - 3)
 	
 	elif value.ends_with('""'):
 		
-		value = value.substr( 0, value.length() - 2 )
+		value = value.substr(0, value.length() - 2)
 	
-	return _check_multiline_doublequotation( value )
+	return _check_multiline_doublequotation(value)
 
 
 
@@ -50,21 +50,21 @@ func parse_multiline_doublequotation( _value: String ) -> String:
 # 单引号表示原始字面量
 # 不需要处理字符串中的手动转义
 # 只需要把两边的单引号截取一下就可以了
-func parse_singlequotes( _value: String ) -> Variant:
+func parse_singlequotes(_value: String) -> Variant:
 	
-	return _value.substr( 1, _value.length() - 2 )
+	return _value.substr(1, _value.length() - 2)
 
 
 
 
 # 解析 单引号多行
-func parse_multiline_singlequotes( _value: String ) -> String:
+func parse_multiline_singlequotes(_value: String) -> String:
 	
-	if _value.ends_with( "'''" ):
+	if _value.ends_with("'''"):
 		
-		return _value.substr( 3, _value.length() - 6 )
+		return _value.substr(3, _value.length() - 6)
 	
-	return _value.substr( 3, _value.length() - 5 )
+	return _value.substr(3, _value.length() - 5)
 
 
 
@@ -86,7 +86,7 @@ func parse_multiline_singlequotes( _value: String ) -> String:
 # 如果前4个不够就报错
 #  a-z A-Z 字符
 # TODO
-func _check_doublequotation( _value: String ) -> String:
+func _check_doublequotation(_value: String) -> String:
 	
 	var result: String = ""
 	
@@ -99,15 +99,15 @@ func _check_doublequotation( _value: String ) -> String:
 	var is_unicod: bool = false
 	var cache_unicod: String = ""
 	var reg: RegEx = RegEx.new()
-	reg.compile( "^[A-Za-z0-9]+$" )
+	reg.compile("^[A-Za-z0-9]+$")
 	
 	var char: String = ""
 	
-	for item in range( 0, _value.length() ):
+	for item in range(0, _value.length()):
 		
-		#print( "char > ", char )
+		#print("char > ", char)
 		
-		char = _value[ item ]
+		char = _value[item]
 		
 		# 处理 \\ 后面紧接着的字符
 		if pos != -1:
@@ -160,23 +160,23 @@ func _check_doublequotation( _value: String ) -> String:
 				# 其他
 				_:
 					
-					assert( false, "错误的转义" )
+					assert(false, "错误的转义")
 			
 			pos = -1
 			
 			continue
 		
 		# 如果遇到转义
-		if _value[ item ] == "\\":
+		if _value[item] == "\\":
 			
 			# 判断是否在 unicod
 			if is_unicod:
 				
 				# 判断是否有效，是否可以作为结尾
 				# 返回空即不匹配
-				var unicod: String = _check_unicod( cache_unicod )
+				var unicod: String = _check_unicod(cache_unicod)
 				
-				assert( not unicod.is_empty(), "unicod 不匹配" )
+				assert(not unicod.is_empty(), "unicod 不匹配")
 				# 添加值
 				result += unicod
 				is_unicod = false
@@ -194,12 +194,12 @@ func _check_doublequotation( _value: String ) -> String:
 				# \u00 011
 				# 用正则表达式判断字符
 				# 如果搜索结果为空就说明到 \u 已经结束了
-				if reg.search( char ) == null:
+				if reg.search(char) == null:
 					
 					# 检查
-					var unicod: String = _check_unicod( cache_unicod )
+					var unicod: String = _check_unicod(cache_unicod)
 					
-					assert( not unicod.is_empty(), "unicod 不匹配" )
+					assert(not unicod.is_empty(), "unicod 不匹配")
 					
 					result += unicod
 					is_unicod = false
@@ -213,9 +213,9 @@ func _check_doublequotation( _value: String ) -> String:
 				# \u0000FFFF
 				if cache_unicod.length() == 10:
 					
-					var unicod: String = _check_unicod( cache_unicod )
+					var unicod: String = _check_unicod(cache_unicod)
 					
-					assert( not unicod.is_empty(), "unicod 不匹配" )
+					assert(not unicod.is_empty(), "unicod 不匹配")
 					
 					result += unicod
 					is_unicod = false
@@ -226,7 +226,7 @@ func _check_doublequotation( _value: String ) -> String:
 				# \u + 4
 				elif cache_unicod.length() > 6:
 					
-					assert( not _check_unicod( cache_unicod ).is_empty(), "unicod 不匹配" )
+					assert(not _check_unicod(cache_unicod).is_empty(), "unicod 不匹配")
 				
 				continue
 			
@@ -235,9 +235,9 @@ func _check_doublequotation( _value: String ) -> String:
 	# 检查是否有残留
 	if is_unicod and not cache_unicod.is_empty():
 		
-		var unicod: String = _check_unicod( cache_unicod )
+		var unicod: String = _check_unicod(cache_unicod)
 		
-		assert( not unicod.is_empty(), "unicod 不匹配" )
+		assert(not unicod.is_empty(), "unicod 不匹配")
 		
 		result += unicod
 	
@@ -263,7 +263,7 @@ func _check_doublequotation( _value: String ) -> String:
 # 紧接着不是遇到上面的字符而是遇到 " " 或 "\t"
 # 就需要保证 从现在开始知道遇到 \n （非手动 \n 就是 "\\n"）
 # 检查 多行字符串 是否合法
-func _check_multiline_doublequotation( _value: String ) -> String:
+func _check_multiline_doublequotation(_value: String) -> String:
 	
 	var result: String = ""
 	
@@ -278,13 +278,13 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 	var is_unicod: bool = false
 	var cache_unicod: String = ""
 	var reg: RegEx = RegEx.new()
-	reg.compile( "^[A-Za-z0-9]+$" )
+	reg.compile("^[A-Za-z0-9]+$")
 	
 	var char: String = ""
 	
-	for item in range( 0, _value.length() ):
+	for item in range(0, _value.length()):
 		
-		char = _value[ item ]
+		char = _value[item]
 		
 		# 处理 \\ 后面紧接着的字符
 		if pos != -1:
@@ -320,7 +320,7 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 					
 					cache_unicod = "\\u"
 					is_unicod = true
-					#print( ">>>" )
+					#print(">>>")
 					pass
 				
 				# 得到 "
@@ -350,7 +350,7 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 				# 其他
 				_:
 					
-					assert( false, "错误的转义" )
+					assert(false, "错误的转义")
 			
 			pos = -1
 			continue
@@ -400,21 +400,21 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 				# 其它字符，就报错
 				_:
 					
-					assert( false, "意外的字符" )
+					assert(false, "意外的字符")
 		
 		else:
 			
 			# 标记手动转义
-			if _value[ item ] == "\\":
+			if _value[item] == "\\":
 				
 				# 判断是否在 unicod
 				if is_unicod:
 					
 					# 判断是否有效，是否可以作为结尾
 					# 返回空即不匹配
-					var unicod: String = _check_unicod( cache_unicod )
+					var unicod: String = _check_unicod(cache_unicod)
 					
-					assert( not unicod.is_empty(), "unicod 不匹配" )
+					assert(not unicod.is_empty(), "unicod 不匹配")
 					# 添加值
 					result += unicod
 					is_unicod = false
@@ -431,12 +431,12 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 					# \u00 011
 					# 用正则表达式判断字符
 					# 如果搜索结果为空就说明到 \u 已经结束了
-					if reg.search( char ) == null:
+					if reg.search(char) == null:
 						
 						# 检查
-						var unicod: String = _check_unicod( cache_unicod )
+						var unicod: String = _check_unicod(cache_unicod)
 						
-						assert( not unicod.is_empty(), "unicod 不匹配" )
+						assert(not unicod.is_empty(), "unicod 不匹配")
 						
 						result += unicod
 						is_unicod = false
@@ -450,9 +450,9 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 					# \u0000FFFF
 					if cache_unicod.length() == 10:
 						
-						var unicod: String = _check_unicod( cache_unicod )
+						var unicod: String = _check_unicod(cache_unicod)
 						
-						assert( not unicod.is_empty(), "unicod 不匹配" )
+						assert(not unicod.is_empty(), "unicod 不匹配")
 						
 						result += unicod
 						is_unicod = false
@@ -463,7 +463,7 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 					# \u + 4
 					elif cache_unicod.length() > 6:
 						
-						assert( not _check_unicod( cache_unicod ).is_empty(), "unicod 不匹配" )
+						assert(not _check_unicod(cache_unicod).is_empty(), "unicod 不匹配")
 					
 					continue
 				
@@ -477,9 +477,9 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 	# 检查是否有残留
 	if is_unicod and not cache_unicod.is_empty():
 		
-		var unicod: String = _check_unicod( cache_unicod )
+		var unicod: String = _check_unicod(cache_unicod)
 		
-		assert( not unicod.is_empty(), "unicod 不匹配" )
+		assert(not unicod.is_empty(), "unicod 不匹配")
 		
 		result += unicod
 	
@@ -490,17 +490,17 @@ func _check_multiline_doublequotation( _value: String ) -> String:
 
 
 # 判断 Unicod 是否有效
-func _check_unicod( _unicod: String ) -> String:
+func _check_unicod(_unicod: String) -> String:
 	
 	var result: String = ""
 	
-	#print( "_unicod :", _unicod, "<<<" )
+	#print("_unicod :", _unicod, "<<<")
 	
 	var reg: RegEx = RegEx.new()
 	
-	reg.compile( "\\\\u([0-9A-Fa-f]{4})|\\\\U([0-9A-Fa-f]{8})/g" )
+	reg.compile("\\\\u([0-9A-Fa-f]{4})|\\\\U([0-9A-Fa-f]{8})/g")
 	
-	var res: RegExMatch = reg.search( _unicod )
+	var res: RegExMatch = reg.search(_unicod)
 	
 	if res:
 		

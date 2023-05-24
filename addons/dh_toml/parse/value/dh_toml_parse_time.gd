@@ -7,7 +7,7 @@
 # 作者：DH-DoveG
 #===========================================
 
-class_name GTomlParseTime
+class_name DHTomlParseTime
 extends Node
 
 
@@ -24,23 +24,23 @@ var pattern: String = "^(?P<year>\\d{4})-(?P<month>0[1-9]|1[012])-(?P<day>0[1-9]
 func _init() -> void:
 	
 	regex = RegEx.new()
-	regex.compile( pattern )
+	regex.compile(pattern)
 
 
 
 
 #
-func parse( _value: String ) -> GTomlTimeObject:
+func parse(_value: String) -> DHTomlTimeObject:
 	
-	var time: GTomlTimeObject = null
+	var time: DHTomlTimeObject = null
 	
-	var rem: RegExMatch = regex.search( _value )
+	var rem: RegExMatch = regex.search(_value)
 	
-	# 如果匹配成功就返回一个 GTomlTimeObject 实例
+	# 如果匹配成功就返回一个 DHTomlTimeObject 实例
 	if rem != null:
 		
-		time = GTomlTimeObject.new()
+		time = DHTomlTimeObject.new()
 		
-		time.time_set( rem.names, rem.strings )
+		time.set_time(rem.names, rem.strings)
 	
 	return time

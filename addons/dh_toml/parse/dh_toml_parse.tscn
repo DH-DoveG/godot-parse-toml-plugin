@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://47d3qso881wv"]
+
+[ext_resource type="Script" path="res://addons/dh_toml/parse/dh_toml_parse.gd" id="1_nexfs"]
+
+[node name="DHTomlParse" type="Node"]
+script = ExtResource("1_nexfs")

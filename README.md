@@ -10,6 +10,8 @@ Toml file parsing plugin for Godot4.
 
 2. ~~支持 Unicode 的转义序列。 Unicode support for escape sequences.~~
 
+3. 支持 godot 中的一些数据类型，例如 Vector2
+
 # 项目地址 load
 
 项目地址一: [github](https://github.com/DH-DoveG/godot-parse-toml-plugin)

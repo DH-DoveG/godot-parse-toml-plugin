@@ -7,24 +7,24 @@
 # 作者：DH-DoveG
 #===========================================
 
-class_name GTomlParseArray
+class_name DHTomlParseArray
 extends Node
 
 
 
 
-func parse( _value: String ) -> Array:
+func parse(_value: String) -> Array:
 	
-	# [ ... ] 这要去掉两边的 中括号 来解析
-	var value: String = _value.substr( 1, _value.length() - 2 )
+	# [...] 这要去掉两边的 中括号 来解析
+	var value: String = _value.substr(1, _value.length() - 2)
 	
-	return _check_array( value )
+	return _check_array(value)
 
 
 
 
 # 检查数组
-func _check_array( _value: String ) -> Array:
+func _check_array(_value: String) -> Array:
 	
 	var current: Array = []
 	
@@ -63,9 +63,9 @@ func _check_array( _value: String ) -> Array:
 	
 	while pos < _value.length():
 		
-		char = _value[ pos ]
+		char = _value[pos]
 		
-		# 如果遇到 [ ,就 + 1 层级
+		# 如果遇到 [,就 + 1 层级
 		if char == "["		and \
 			is_d == 0		and \
 			not is_m_s		and \
@@ -83,7 +83,7 @@ func _check_array( _value: String ) -> Array:
 			tree[next] = sub_arr
 			current = sub_arr
 		
-		# 如果遇到 ] ,就 - 1 层级
+		# 如果遇到] ,就 - 1 层级
 		elif char == "]"	and \
 			is_d == 0		and \
 			not is_m_s		and \
@@ -125,7 +125,7 @@ func _check_array( _value: String ) -> Array:
 			# 如：[1,2,,] 或 [,1,2]
 			# 允许尾逗号
 			# 如：[1,2,]
-			assert( not cache.is_empty(), "错误的','号" )
+			assert(not cache.is_empty(), "错误的','号")
 			
 			current.append(cache)
 			cache = ""
@@ -136,7 +136,7 @@ func _check_array( _value: String ) -> Array:
 			if char == "'":
 				
 				# 判断是否 启用 多行
-				if _value.substr( pos, 3 ) == "'''":
+				if _value.substr(pos, 3) == "'''":
 					
 					# 如果已经启用就关闭
 					is_m_s = not is_m_s
@@ -146,7 +146,7 @@ func _check_array( _value: String ) -> Array:
 					continue
 				
 				# 结尾也允许 ''
-				elif is_m_s and _value.substr( pos, 2 ) == "''":
+				elif is_m_s and _value.substr(pos, 2) == "''":
 					
 					is_m_s = false
 					cache += "''"
@@ -160,7 +160,7 @@ func _check_array( _value: String ) -> Array:
 			elif char == '"':
 				
 				# 判断是否 启用 多行
-				if _value.substr( pos, 3 ) == '"""':
+				if _value.substr(pos, 3) == '"""':
 					
 					# 如果已经启用就关闭
 					is_m_d = not is_m_d
@@ -170,7 +170,8 @@ func _check_array( _value: String ) -> Array:
 					continue
 				
 				# 结尾也允许 ""
-				elif is_m_d and _value.substr( pos, 2 ) == '""':
+				elif is_m_d and \
+					_value.substr(pos, 2) == '""':
 					
 					is_m_d = false
 					cache += '""'
@@ -184,7 +185,10 @@ func _check_array( _value: String ) -> Array:
 				
 				cache += char
 		
-		elif inDoubleQuotes or inQuotes or is_m_s or is_m_d:
+		elif inDoubleQuotes or \
+			inQuotes or \
+			is_m_s or \
+			is_m_d:
 			
 			cache += char
 		
